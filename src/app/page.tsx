@@ -19,7 +19,7 @@ export default function HomePage() {
   const fetchPosts = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/posts');
+      const res = await fetch('/api/posts', { cache: 'no-store' });
       const data = await res.json();
       if (res.ok && data.posts) {
         setPosts(data.posts);
@@ -161,7 +161,11 @@ export default function HomePage() {
       ) : filteredPosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onDeleted={(deletedId) => setPosts((prev) => prev.filter((p) => p.id !== deletedId))}
+            />
           ))}
         </div>
       ) : (
