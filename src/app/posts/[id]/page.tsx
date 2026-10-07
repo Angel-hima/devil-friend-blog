@@ -161,7 +161,12 @@ function PostDetailContent() {
         </div>
       </div>
 
-      <div className="mb-6 space-y-3">
+      {/* 記事メインカード */}
+      <div
+        className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-6 mb-8"
+        style={{ backgroundColor: '#ffffff', color: '#0f172a' }}
+      >
+        {/* タイプバッジ */}
         <div className="flex items-center space-x-2">
           {post.type === 'vlog' ? (
             <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-600 text-white shadow-sm">
@@ -176,61 +181,71 @@ function PostDetailContent() {
           )}
         </div>
 
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+        {/* 記事タイトル */}
+        <h1
+          className="text-2xl sm:text-4xl font-extrabold text-slate-900 leading-tight"
+          style={{ color: '#0f172a' }}
+        >
           {post.title}
         </h1>
 
-        <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-500 pt-2 border-b border-slate-100 pb-4">
-          <div className="flex items-center space-x-1.5 font-medium text-slate-700">
-            <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+        {/* 投稿者と日付 */}
+        <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-slate-600 pt-2 border-b border-slate-100 pb-4">
+          <div className="flex items-center space-x-1.5 font-bold text-slate-800">
+            <div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-slate-700">
               <User className="w-3.5 h-3.5" />
             </div>
             <span>{post.authorName}</span>
           </div>
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 font-medium text-slate-600">
             <Calendar className="w-4 h-4 text-slate-400" />
             <span>{dateStr}</span>
           </div>
         </div>
-      </div>
 
-      {post.type === 'vlog' && post.videoUrl && (
-        <div className="mb-8">
-          <VideoPlayer url={post.videoUrl} />
-        </div>
-      )}
+        {/* Vlogの場合：動画プレイヤー */}
+        {post.type === 'vlog' && post.videoUrl && (
+          <div className="my-6">
+            <VideoPlayer url={post.videoUrl} />
+          </div>
+        )}
 
-      {post.coverImage && (!post.videoUrl || post.type === 'blog') && (
-        <div className="mb-8 rounded-2xl overflow-hidden shadow-md max-h-[500px]">
-          <img
-            src={post.coverImage}
-            alt={post.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
+        {/* カバー画像 */}
+        {post.coverImage && (!post.videoUrl || post.type === 'blog') && (
+          <div className="my-6 rounded-2xl overflow-hidden shadow-md max-h-[500px]">
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        )}
 
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm mb-8">
-        <div className="prose prose-slate max-w-none text-slate-800 text-base sm:text-lg leading-relaxed font-normal prose-headings:font-bold prose-headings:text-slate-900 prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-200 prose-h2:pb-2 prose-h3:text-xl prose-p:leading-relaxed prose-p:text-slate-800 prose-li:text-slate-800">
+        {/* 本文エリア */}
+        <div
+          className="prose prose-slate max-w-none text-slate-900 text-base sm:text-lg leading-relaxed pt-2"
+          style={{ color: '#0f172a' }}
+        >
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
-      </div>
 
-      {post.tags && post.tags.length > 0 && (
-        <div className="flex items-center space-x-2 pt-2">
-          <Tag className="w-4 h-4 text-slate-600" />
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center text-xs font-bold text-indigo-900 bg-indigo-100 px-3 py-1 rounded-xl"
-              >
-                #{tag}
-              </span>
-            ))}
+        {/* タグ一覧 */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex items-center space-x-2 pt-4 border-t border-slate-100">
+            <Tag className="w-4 h-4 text-slate-500" />
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center text-xs font-bold text-indigo-900 bg-indigo-100 px-3 py-1 rounded-xl"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </article>
   );
 }

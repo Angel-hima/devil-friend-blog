@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: light !important;
   --background: #f8fafc;
   --foreground: #0f172a;
 }
@@ -12,17 +13,35 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* ダークモードでの予期せぬ文字色・背景色の反転事故を防止 */
-body {
+/* ダークモードや拡張機能による強制反転を完全無効化 */
+html, body {
+  color-scheme: light !important;
   background-color: #f8fafc !important;
   color: #0f172a !important;
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-/* 選択時のハイライトを見やすく */
+/* 記事本文内のテキスト色を常にくっきり濃い黒に保証 */
+.prose,
+.prose p,
+.prose span,
+.prose li,
+.prose strong,
+.prose em,
+.prose blockquote {
+  color: #0f172a !important;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+/* 選択時の色 */
 ::selection {
-  background-color: #6366f1;
+  background-color: #4f46e5;
   color: #ffffff;
 }

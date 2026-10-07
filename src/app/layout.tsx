@@ -26,8 +26,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-slate-50 text-slate-800">
+    <html
+      lang="ja"
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      style={{ colorScheme: 'light' }}
+    >
+      <body
+        className="min-h-full flex flex-col bg-slate-50 text-slate-900"
+        style={{ colorScheme: 'light', backgroundColor: '#f8fafc', color: '#0f172a' }}
+      >
         <AuthProvider>
           <Navbar />
           <main className="flex-1 pb-16">{children}</main>
