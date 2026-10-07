@@ -1,69 +1,178 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import React, { useEffect, useState } from 'react';
+import { Post } from '@/lib/types';
+import PostCard from '@/components/PostCard';
+import { Video, BookOpen, Sparkles, Filter, Search } from 'lucide-react';
+
+export default function HomePage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedType, setSelectedType] = useState<'all' | 'vlog' | 'blog'>('all');
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch('/api/posts');
+      const data = await res.json();
+      if (res.ok && data.posts) {
+        setPosts(data.posts);
+      }
+    } catch (err) {
+      console.error('Failed to fetch posts:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const allTags = Array.from(
+    new Set(posts.flatMap((p) => p.tags || []))
+  );
+
+  const filteredPosts = posts.filter((post) => {
+    const matchesType = selectedType === 'all' || post.type === selectedType;
+    const matchesTag = !selectedTag || post.tags?.includes(selectedTag);
+    const matchesSearch =
+      !searchQuery.trim() ||
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.authorName.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return matchesType && matchesTag && matchesSearch;
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <section className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-600 text-white p-8 sm:p-12 mb-10 shadow-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative z-10 max-w-2xl">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase mb-4 text-indigo-100">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Friends Shared Space</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
+            友達とつくる、<br />動画と日常の記録
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-indigo-100 text-sm sm:text-base leading-relaxed">
+            YouTube動画のシェアから、週末のキャンプやお気に入りカフェの思い出まで。
+            招待キーを持った仲間と一緒に投稿できるオープンなVlog・Blogスペースです。
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div className="flex items-center space-x-2 bg-slate-200/70 p-1 rounded-2xl w-fit">
+          <button
+            onClick={() => setSelectedType('all')}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold transition ${
+              selectedType === 'all'
+                ? 'bg-white text-slate-900 shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            すべて
+          </button>
+          <button
+            onClick={() => setSelectedType('vlog')}
+            className={`inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition ${
+              selectedType === 'vlog'
+                ? 'bg-rose-500 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
           >
-            Documentation
-          </a>
+            <Video className="w-4 h-4" />
+            <span>Vlog</span>
+          </button>
+          <button
+            onClick={() => setSelectedType('blog')}
+            className={`inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-semibold transition ${
+              selectedType === 'blog'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+            <span>Blog</span>
+          </button>
         </div>
-      </main>
+
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="タイトル・本文・投稿者を検索..."
+            className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900"
+          />
+        </div>
+      </div>
+
+      {allTags.length > 0 && (
+        <div className="flex items-center space-x-2 overflow-x-auto pb-3 mb-6 scrollbar-none">
+          <span className="text-xs font-semibold text-slate-400 flex items-center space-x-1 flex-shrink-0">
+            <Filter className="w-3.5 h-3.5" />
+            <span>タグ:</span>
+          </span>
+          <button
+            onClick={() => setSelectedTag(null)}
+            className={`text-xs px-3 py-1 rounded-lg font-medium transition flex-shrink-0 ${
+              selectedTag === null
+                ? 'bg-slate-900 text-white'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+            }`}
+          >
+            すべて
+          </button>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+              className={`text-xs px-3 py-1 rounded-lg font-medium transition flex-shrink-0 ${
+                selectedTag === tag
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              #{tag}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="bg-white rounded-2xl h-80 animate-pulse border border-slate-100 p-4 flex flex-col justify-between">
+              <div className="bg-slate-200 h-44 rounded-xl mb-4" />
+              <div className="space-y-2">
+                <div className="bg-slate-200 h-4 rounded w-3/4" />
+                <div className="bg-slate-200 h-3 rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : filteredPosts.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredPosts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-20 bg-white rounded-3xl border border-slate-100 shadow-sm">
+          <BookOpen className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+          <h3 className="text-lg font-bold text-slate-700 mb-1">投稿が見つかりませんでした</h3>
+          <p className="text-sm text-slate-500 max-w-sm mx-auto">
+            条件に一致する記事がないか、まだ投稿されていません。右上の「投稿する」ボタンから記事を追加してみましょう！
+          </p>
+        </div>
+      )}
     </div>
   );
 }

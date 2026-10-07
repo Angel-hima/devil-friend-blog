@@ -1,0 +1,22 @@
+{
+  "keys": [
+    {
+      "key": "admin-master-key-777",
+      "name": "管理者 (あなた)",
+      "role": "admin",
+      "createdAt": "2026-10-07T00:00:00.000Z"
+    },
+    {
+      "key": "friend-key-alice",
+      "name": "アリス",
+      "role": "author",
+      "createdAt": "2026-10-07T00:00:00.000Z"
+    },
+    {
+      "key": "friend-key-bob",
+      "name": "ボブ",
+      "role": "author",
+      "createdAt": "2026-10-07T00:00:00.000Z"
+    }
+  ]
+}
