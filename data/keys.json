@@ -1,20 +1,20 @@
 {
   "keys": [
     {
-      "key": "admin-master-key-777",
-      "name": "管理者 (あなた)",
+      "key": "admin-key-0907himacchi",
+      "name": "天使",
       "role": "admin",
       "createdAt": "2026-10-07T00:00:00.000Z"
     },
     {
-      "key": "friend-key-alice",
-      "name": "アリス",
+      "key": "friend-key-devil-1202",
+      "name": "デビル",
       "role": "author",
       "createdAt": "2026-10-07T00:00:00.000Z"
     },
     {
-      "key": "friend-key-bob",
-      "name": "ボブ",
+      "key": "friend-key-soda-soda-21321",
+      "name": "ソーダ",
       "role": "author",
       "createdAt": "2026-10-07T00:00:00.000Z"
     }

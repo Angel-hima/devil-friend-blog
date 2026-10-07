@@ -2,29 +2,16 @@
   "posts": [
     {
       "id": "post-1",
-      "title": "友達と行く！秋の週末キャンプVlog 🏕️",
-      "authorKey": "friend-key-alice",
-      "authorName": "アリス",
+      "title": "サイト公開！",
+      "authorKey": "admin-key-0907himacchi",
+      "authorName": "天使",
       "type": "vlog",
-      "videoUrl": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      "coverImage": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&auto=format&fit=crop&q=80",
-      "content": "先週末、みんなで秋キャンプに行ってきました！\n紅葉がとても綺麗で、焚き火とキャンプ飯を堪能しました。動画をまとめたのでぜひ見てください！\n\n### 🏕️ 今回のハイライト\n- 富士山を眺めながらのバーベキュー\n- 夜の星空タイムとホットココア\n- 朝淹れたてのドリップコーヒーとホットサンド\n\n次のキャンプ地のリクエストも待ってます！",
-      "tags": ["キャンプ", "秋旅", "Vlog", "アウトドア"],
+      "videoUrl": "",
+      "coverImage": "",
+      "content": "天使です。\nブログサイトを公開しました。",
+      "tags": ["サイト公開", "サイト"],
       "createdAt": "2026-10-06T10:30:00.000Z",
       "updatedAt": "2026-10-06T10:30:00.000Z"
-    },
-    {
-      "id": "post-2",
-      "title": "おすすめのカフェ＆お気に入り読書スポットまとめ ☕",
-      "authorKey": "friend-key-bob",
-      "authorName": "ボブ",
-      "type": "blog",
-      "videoUrl": "",
-      "coverImage": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&auto=format&fit=crop&q=80",
-      "content": "最近見つけた落ち着くカフェを友達のみんなにシェアします！\n\n静かな裏路地にあって、自家焙煎の深煎りコーヒーとバスクチーズケーキが絶品でした。\n\n### ☕ 店舗のポイント\n1. 静かで作業や読書に集中できる\n2. 電源・Wi-Fi完備\n3. 窓から緑が見えるカウンター席がおすすめ\n\n次回みんなで集まるときに行ってみよう！",
-      "tags": ["カフェ巡り", "休日", "おすすめ", "読書"],
-      "createdAt": "2026-10-05T15:00:00.000Z",
-      "updatedAt": "2026-10-05T15:00:00.000Z"
     }
   ]
 }
