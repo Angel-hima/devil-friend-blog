@@ -17,6 +17,10 @@ import {
   AlertCircle,
   ExternalLink,
   Sparkles,
+  Plus,
+  PenSquare,
+  Video,
+  BookOpen,
 } from 'lucide-react';
 
 export default function AdminPage() {
@@ -35,6 +39,18 @@ export default function AdminPage() {
 
   const [jsonText, setJsonText] = useState('');
   const [jsonMsg, setJsonMsg] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  // 管理者パネルからの新規投稿用状態
+  const [showNewPostForm, setShowNewPostForm] = useState(false);
+  const [postTitle, setPostTitle] = useState('');
+  const [postType, setPostType] = useState<'vlog' | 'blog'>('vlog');
+  const [postVideoUrl, setPostVideoUrl] = useState('');
+  const [postCoverImage, setPostCoverImage] = useState('');
+  const [postContent, setPostContent] = useState('');
+  const [postTags, setPostTags] = useState('');
+  const [postSubmitting, setPostSubmitting] = useState(false);
+  const [postFormError, setPostFormError] = useState<string | null>(null);
+  const [postSuccessMsg, setPostSuccessMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (key && role === 'admin') {
@@ -172,6 +188,67 @@ export default function AdminPage() {
       }
     } catch (err) {
       alert('通信エラーが発生しました');
+    }
+  };
+
+  // 管理者パネルからの新規投稿処理
+  const handleCreatePostAdmin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!key) return;
+    setPostFormError(null);
+    setPostSuccessMsg(null);
+
+    if (!postTitle.trim()) {
+      setPostFormError('タイトルを入力してください');
+      return;
+    }
+    if (!postContent.trim()) {
+      setPostFormError('本文を入力してください');
+      return;
+    }
+    if (postType === 'vlog' && !postVideoUrl.trim()) {
+      setPostFormError('Vlog投稿の場合は動画URL（YouTube等）を入力してください');
+      return;
+    }
+
+    const tags = postTags
+      .split(/[,、]/)
+      .map((t) => t.trim().replace(/^#/, ''))
+      .filter(Boolean);
+
+    setPostSubmitting(true);
+    try {
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key,
+          title: postTitle.trim(),
+          content: postContent.trim(),
+          type: postType,
+          videoUrl: postVideoUrl.trim(),
+          coverImage: postCoverImage.trim(),
+          tags,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.post) {
+        setPostsList((prev) => [data.post, ...prev]);
+        setPostSuccessMsg('記事を新しく公開しました！');
+        setPostTitle('');
+        setPostVideoUrl('');
+        setPostCoverImage('');
+        setPostContent('');
+        setPostTags('');
+        setShowNewPostForm(false);
+      } else {
+        setPostFormError(data.message || '投稿の作成に失敗しました');
+      }
+    } catch (err) {
+      setPostFormError('通信エラーが発生しました');
+    } finally {
+      setPostSubmitting(false);
     }
   };
 
@@ -445,12 +522,156 @@ export default function AdminPage() {
       )}
 
       {activeTab === 'posts' && (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm">
-          <h3 className="text-lg font-bold text-slate-900 mb-1 flex items-center space-x-2">
-            <FileText className="w-5 h-5 text-emerald-600" />
-            <span>全記事の統括管理</span>
-          </h3>
-          <p className="text-xs text-slate-500 mb-6">管理者としてすべての投稿を確認・強制削除できます</p>
+        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-bold text-slate-900 mb-1 flex items-center space-x-2">
+                <FileText className="w-5 h-5 text-emerald-600" />
+                <span>全記事の統括・作成管理</span>
+              </h3>
+              <p className="text-xs text-slate-500">管理者として記事の新規投稿、確認、強制削除ができます</p>
+            </div>
+            <button
+              onClick={() => {
+                setShowNewPostForm(!showNewPostForm);
+                setPostSuccessMsg(null);
+              }}
+              className="inline-flex items-center space-x-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold shadow-md transition w-fit"
+            >
+              <Plus className="w-4 h-4" />
+              <span>{showNewPostForm ? 'フォームを閉じる' : '新しい投稿を追加'}</span>
+            </button>
+          </div>
+
+          {postSuccessMsg && (
+            <div className="p-3.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-semibold flex items-center space-x-2">
+              <Check className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+              <span>{postSuccessMsg}</span>
+            </div>
+          )}
+
+          {/* 新規投稿フォーム（トグル表示） */}
+          {showNewPostForm && (
+            <form onSubmit={handleCreatePostAdmin} className="p-6 bg-slate-50/80 rounded-2xl border border-slate-200/80 space-y-4">
+              <h4 className="font-bold text-sm text-slate-800 flex items-center space-x-2">
+                <PenSquare className="w-4 h-4 text-emerald-600" />
+                <span>管理者として記事を投稿する</span>
+              </h4>
+
+              {postFormError && (
+                <div className="p-3 bg-red-50 text-red-700 rounded-xl text-xs flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>{postFormError}</span>
+                </div>
+              )}
+
+              {/* タイプ切り替え */}
+              <div className="flex items-center space-x-2 bg-white p-1 rounded-xl w-fit border border-slate-200">
+                <button
+                  type="button"
+                  onClick={() => setPostType('vlog')}
+                  className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    postType === 'vlog' ? 'bg-rose-500 text-white shadow-sm' : 'text-slate-600'
+                  }`}
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Vlog (動画)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPostType('blog')}
+                  className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    postType === 'blog' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600'
+                  }`}
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Blog (記事)</span>
+                </button>
+              </div>
+
+              {/* タイトル */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">タイトル *</label>
+                <input
+                  type="text"
+                  value={postTitle}
+                  onChange={(e) => setPostTitle(e.target.value)}
+                  placeholder="例: おすすめスポット紹介 / 最新Vlog"
+                  className="w-full px-3.5 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                  required
+                />
+              </div>
+
+              {/* Vlog用動画URL */}
+              {postType === 'vlog' && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1">YouTube / Vimeo 動画URL *</label>
+                  <input
+                    type="url"
+                    value={postVideoUrl}
+                    onChange={(e) => setPostVideoUrl(e.target.value)}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="w-full px-3.5 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                    required
+                  />
+                </div>
+              )}
+
+              {/* カバー画像URL */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">カバー画像URL (任意)</label>
+                <input
+                  type="url"
+                  value={postCoverImage}
+                  onChange={(e) => setPostCoverImage(e.target.value)}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-3.5 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                />
+              </div>
+
+              {/* 本文 */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">本文 (Markdown対応) *</label>
+                <textarea
+                  value={postContent}
+                  onChange={(e) => setPostContent(e.target.value)}
+                  rows={4}
+                  placeholder="記事の本文を入力してください（見出しは ##、箇条書きは -）"
+                  className="w-full px-3.5 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                  required
+                />
+              </div>
+
+              {/* タグ */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">タグ (カンマ区切り)</label>
+                <input
+                  type="text"
+                  value={postTags}
+                  onChange={(e) => setPostTags(e.target.value)}
+                  placeholder="キャンプ, 休日, Vlog"
+                  className="w-full px-3.5 py-2 text-sm bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-900"
+                />
+              </div>
+
+              <div className="flex items-center justify-end space-x-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowNewPostForm(false)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200 rounded-lg transition"
+                >
+                  キャンセル
+                </button>
+                <button
+                  type="submit"
+                  disabled={postSubmitting}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition disabled:opacity-50"
+                >
+                  {postSubmitting ? '保存中...' : '管理者として公開する'}
+                </button>
+              </div>
+            </form>
+          )}
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
