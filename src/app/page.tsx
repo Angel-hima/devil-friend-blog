@@ -52,14 +52,14 @@ export default function HomePage() {
       <section className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-700 via-indigo-600 to-purple-600 text-white p-8 sm:p-12 mb-10 shadow-xl">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase mb-4 text-indigo-100">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Friends Shared Space</span>
+          <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase mb-4 text-white">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span className="font-bold">Friends Shared Space</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight drop-shadow-md text-white">
             友達とつくる、<br />動画と日常の記録
           </h1>
-          <p className="text-indigo-100 text-sm sm:text-base leading-relaxed">
+          <p className="text-white text-sm sm:text-base leading-relaxed font-medium drop-shadow-sm opacity-95">
             YouTube動画のシェアから、週末のキャンプやお気に入りカフェの思い出まで。
             招待キーを持った仲間と一緒に投稿できるオープンなVlog・Blogスペースです。
           </p>

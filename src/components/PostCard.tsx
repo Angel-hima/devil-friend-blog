@@ -118,7 +118,7 @@ export default function PostCard({ post, onDeleted }: PostCardProps) {
             <Link href={`/posts/${post.id}`}>{post.title}</Link>
           </h3>
 
-          <p className="text-sm text-slate-600 line-clamp-2 mb-4 leading-relaxed">
+          <p className="text-sm text-slate-700 line-clamp-2 mb-4 leading-relaxed font-normal">
             {post.content.replace(/[#*`_-]/g, '')}
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function PostCard({ post, onDeleted }: PostCardProps) {
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center text-xs text-indigo-700 bg-indigo-50/80 px-2 py-0.5 rounded-md font-medium"
+                  className="inline-flex items-center text-xs text-indigo-900 bg-indigo-100/90 px-2.5 py-1 rounded-md font-bold"
                 >
                   #{tag}
                 </span>
@@ -137,14 +137,14 @@ export default function PostCard({ post, onDeleted }: PostCardProps) {
             </div>
           )}
 
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <div className="flex items-center space-x-1.5 font-medium text-slate-700">
-              <div className="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-slate-600">
+          <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+            <div className="flex items-center space-x-1.5 font-bold text-slate-800">
+              <div className="w-5 h-5 rounded-full bg-slate-200 flex items-center justify-center text-slate-700">
                 <User className="w-3 h-3" />
               </div>
               <span>{post.authorName}</span>
             </div>
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1 font-medium text-slate-600">
               <Calendar className="w-3.5 h-3.5" />
               <span>{dateStr}</span>
             </div>

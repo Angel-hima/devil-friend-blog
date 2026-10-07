@@ -210,20 +210,20 @@ function PostDetailContent() {
         </div>
       )}
 
-      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-100 shadow-sm mb-8">
-        <div className="prose prose-slate max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-100 prose-h2:pb-2 prose-h3:text-xl prose-p:leading-relaxed prose-p:text-slate-700 prose-li:text-slate-700">
+      <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm mb-8">
+        <div className="prose prose-slate max-w-none text-slate-800 text-base sm:text-lg leading-relaxed font-normal prose-headings:font-bold prose-headings:text-slate-900 prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-200 prose-h2:pb-2 prose-h3:text-xl prose-p:leading-relaxed prose-p:text-slate-800 prose-li:text-slate-800">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
       </div>
 
       {post.tags && post.tags.length > 0 && (
         <div className="flex items-center space-x-2 pt-2">
-          <Tag className="w-4 h-4 text-slate-400" />
+          <Tag className="w-4 h-4 text-slate-600" />
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center text-xs font-semibold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-xl"
+                className="inline-flex items-center text-xs font-bold text-indigo-900 bg-indigo-100 px-3 py-1 rounded-xl"
               >
                 #{tag}
               </span>
